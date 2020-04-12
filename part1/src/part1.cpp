@@ -76,15 +76,55 @@ void createCube(Context &ctx)
          0.5f, -0.5f,  0.5f,
          0.5f,  0.5f,  0.5f, // first triangle ends here
 
+        //FIXA
         // back face
+         0.5f,  0.5f,  -0.5f, // first triangle starts here
+        -0.5f,  0.5f,  -0.5f,
+         0.5f,  -0.5f,  -0.5f, 
+
+        0.5f, -0.5f,  -0.5f, // second triangle starts here
+        -0.5f, -0.5f,  -0.5f,
+        -0.5f,  0.5f,  -0.5f, 
+
 
         // left face
+        -0.5f,  0.5f,  0.5f, // first triangle starts here
+        -0.5f,  0.5f,  -0.5f,
+        -0.5f,  -0.5f,  -0.5f, 
+
+        -0.5f, -0.5f,  -0.5f, // second triangle starts here
+        -0.5f, -0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f, 
+
 
         // right face
+        0.5f,  0.5f,  0.5f, // first triangle starts here
+        0.5f,  0.5f,  -0.5f,
+        0.5f,  -0.5f,  0.5f, 
+
+        0.5f, -0.5f,  0.5f, // second triangle starts here
+        0.5f, -0.5f,  -0.5f,
+        0.5f,  0.5f,  -0.5f, // second triangle ends here
+
 
         // top face
+        -0.5f, 0.5f,  0.5f, // first triangle starts here
+        -0.5f, 0.5f,  -0.5f,
+        0.5f,  0.5f,  -0.5f, 
+
+        0.5f, 0.5f,  -0.5f, // second triangle starts here
+        0.5f, 0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f, 
+
 
         // bottom face
+        -0.5f,  -0.5f,  0.5f, // first triangle starts here
+        -0.5f,  -0.5f,  -0.5f,
+         0.5f,  -0.5f,  -0.5f, 
+
+        0.5f, -0.5f,  -0.5f, // second triangle starts here
+        -0.5f, -0.5f,  0.5f,
+        0.5f,  -0.5f,  0.5f,
 
     };
 
@@ -121,20 +161,22 @@ void drawCube(Context &ctx)
 
     // Define the model, view, and projection matrices here
     glm::mat4 model = glm::mat4(1.0f);
+    //FIXA!-> glm::mat4 model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0)); // where x, y, z is axis of rotation (e.g. 0 1 0)
     glm::mat4 view = glm::mat4(1.0f);
     glm::mat4 projection = glm::mat4(1.0f);
+    glm::mat4 mvp = projection * view * model; //modelviewprojection skickas till vertex shader
 
     // Concatenate the model, view, and projection matrices to a
     // ModelViewProjection (MVP) matrix and pass it as a uniform
     // variable to the shader program.
     //
     // Hint: you pass GLM matrices to shader programs like this:
-    // glUniformMatrix4fv(glGetUniformLocation(program, "u_mvp"),
-    //                    1, GL_FALSE, &mvp[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(ctx.program, "u_mvp"),  //skickar med program som finns i struct context
+                        1, GL_FALSE, &mvp[0][0]);
 
 
     glBindVertexArray(ctx.cubeVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, 36); //ändrar till 36
     glBindVertexArray(ctx.defaultVAO);
 
     glUseProgram(0);
