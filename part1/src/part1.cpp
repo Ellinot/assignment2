@@ -71,60 +71,64 @@ void createCube(Context &ctx)
     // vertices that together make up 12 triangles. One triangle is
     // given; you have to define the rest!
     const GLfloat vertices[] = {
-        // front face
-        -0.5f, -0.5f,  0.5f, // first triangle starts here
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f, // first triangle ends here
-
-        //FIXA
-        // back face
-         0.5f,  0.5f,  -0.5f, // first triangle starts here
-        -0.5f,  0.5f,  -0.5f,
-         0.5f,  -0.5f,  -0.5f, 
-
-        0.5f, -0.5f,  -0.5f, // second triangle starts here
-        -0.5f, -0.5f,  -0.5f,
-        -0.5f,  0.5f,  -0.5f, 
-
-
-        // left face
-        -0.5f,  0.5f,  0.5f, // first triangle starts here
-        -0.5f,  0.5f,  -0.5f,
-        -0.5f,  -0.5f,  -0.5f, 
-
-        -0.5f, -0.5f,  -0.5f, // second triangle starts here
-        -0.5f, -0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f, 
-
-
-        // right face
-        0.5f,  0.5f,  0.5f, // first triangle starts here
-        0.5f,  0.5f,  -0.5f,
-        0.5f,  -0.5f,  0.5f, 
-
-        0.5f, -0.5f,  0.5f, // second triangle starts here
-        0.5f, -0.5f,  -0.5f,
-        0.5f,  0.5f,  -0.5f, // second triangle ends here
-
-
-        // top face
-        -0.5f, 0.5f,  0.5f, // first triangle starts here
-        -0.5f, 0.5f,  -0.5f,
-        0.5f,  0.5f,  -0.5f, 
-
-        0.5f, 0.5f,  -0.5f, // second triangle starts here
-        0.5f, 0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f, 
-
-
-        // bottom face
+       
+        //front face 
         -0.5f,  -0.5f,  0.5f, // first triangle starts here
-        -0.5f,  -0.5f,  -0.5f,
-         0.5f,  -0.5f,  -0.5f, 
+         0.5f,  -0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f, 
+       
+         0.5f, 0.5f, 0.5f,  // second triangle starts here
+        -0.5f, -0.5f, 0.5f,
+        -0.5f, 0.5f, 0.5f,
 
-        0.5f, -0.5f,  -0.5f, // second triangle starts here
-        -0.5f, -0.5f,  0.5f,
-        0.5f,  -0.5f,  0.5f,
+
+        //back face
+        -0.5f, 0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+
+        -0.5f, 0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f, 0.5f, -0.5f,
+
+
+        //left face
+         0.5f, 0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f, 0.5f,
+
+         0.5f, 0.5f, -0.5f,
+         0.5f, -0.5f, 0.5f,
+         0.5f, 0.5f, 0.5f,
+
+
+        //right face
+         -0.5f, 0.5f, 0.5f,
+         -0.5f, -0.5f, 0.5f,
+         -0.5f, -0.5f, -0.5f,
+       
+         -0.5f, 0.5f, 0.5f,
+         -0.5f, -0.5f, -0.5f,
+         -0.5f, 0.5f, -0.5f,
+
+
+        //top face
+         0.5f, -0.5f, 0.5f,
+         0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
+
+         0.5f, -0.5f, 0.5f,
+        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, 0.5f,
+       
+        //bottom face
+        -0.5f, 0.5f, -0.5f,
+         0.5f,  0.5f, -0.5f,
+         0.5f,  0.5f, 0.5f,
+
+        -0.5f, 0.5f, -0.5f,
+         0.5f, 0.5f, 0.5f,
+        -0.5f,  0.5f, 0.5f,    
 
     };
 
@@ -158,6 +162,7 @@ void drawCube(Context &ctx)
     glUseProgram(ctx.program);
 
     double elapsed_time = glfwGetTime();
+     glUniform1f(glGetUniformLocation(ctx.program, "u_time"), float(elapsed_time)); //lägger till denna för u_time
 
     // Define the model, view, and projection matrices here
     glm::mat4 model = glm::mat4(1.0f);
