@@ -34,9 +34,9 @@ void main()
     v_color = a_position.xyz + 0.5; // converts vertex position to RGB color
 
 
-    //mat4 T = translate(vec3(0.0, sin(u_time), 0.0));
-    mat4 R = rotate(0.5 * u_time, normalize(vec3(-0.5, -0.5, 0.5)));
+    //mat4 T = translate(vec3(1.0, sin(u_time), 0.0));
+    mat4 R = rotate(2.0 * u_time, normalize(vec3(-0.5f, -0.1f, -0.5f)));
 
-    gl_Position = u_mvp * R * a_position; //a_position är som varje vertex
-    //gl_Position = R * a_position;
+    gl_Position = u_mvp * R * a_position; // tillämpar u_mvp till varje vertex (a_position)
+    //gl_Position = u_mvp * R * a_position;
 }

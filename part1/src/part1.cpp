@@ -162,21 +162,41 @@ void drawCube(Context &ctx)
     glUseProgram(ctx.program);
 
     double elapsed_time = glfwGetTime();
-     glUniform1f(glGetUniformLocation(ctx.program, "u_time"), float(elapsed_time)); //lägger till denna för u_time
+    glUniform1f(glGetUniformLocation(ctx.program, "u_time"), float(elapsed_time)); //lägger till denna för u_time
 
     // Define the model, view, and projection matrices here
+  
+    
+    //glm::mat4 projection = glm::mat4(1.0f);
+    //glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float) 100.0 / (float) 100.0, 0.1f, 100.0f);
+    glm::mat4 projection = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.0f,100.0f);
+    // glm::mat4 view = glm::mat4(1.0f);
+    
+    // Camera matrix
+    glm::mat4 view = glm::lookAt(
+    glm::vec3(10,10,10), // Camera is at (10,10,10), in World Space
+    glm::vec3(0,0,0), // and looks at the origin
+    glm::vec3(0,-1,0)  // set to 0,-1,0 to look upside-down
+    );
+    
     glm::mat4 model = glm::mat4(1.0f);
-    //FIXA!-> glm::mat4 model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0)); // where x, y, z is axis of rotation (e.g. 0 1 0)
-    glm::mat4 view = glm::mat4(1.0f);
-    glm::mat4 projection = glm::mat4(1.0f);
-    glm::mat4 mvp = projection * view * model; //modelviewprojection skickas till vertex shader
+    
+    glm::mat4 translation = glm::translate(model, glm::vec3(0.f));
+	glm::mat4 rotationX = glm::rotate(model, glm::radians(15.f), glm::vec3(1.f, 0.f, 0.0f));
+    glm::mat4 rotationY = glm::rotate(model, glm::radians(10.f), glm::vec3(0.f, 1.f, 0.0f));
+    glm::mat4 rotationZ = glm::rotate(model, glm::radians(20.f), glm::vec3(0.f, 0.f, 1.0f));
+    glm::mat4 scale = glm::scale(model, glm::vec3(0.8f) * (float) elapsed_time);
+    
+    glm::mat4 mvp = projection * view * model * translation * rotationZ * rotationY * rotationX * scale; //modelviewprojection skickas till vertex shader
+
+
 
     // Concatenate the model, view, and projection matrices to a
     // ModelViewProjection (MVP) matrix and pass it as a uniform
     // variable to the shader program.
     //
     // Hint: you pass GLM matrices to shader programs like this:
-    glUniformMatrix4fv(glGetUniformLocation(ctx.program, "u_mvp"),  //skickar med program som finns i struct context
+    glUniformMatrix4fv(glGetUniformLocation(ctx.program, "u_mvp"),  //skickar med program till vertex shader som finns i struct context
                         1, GL_FALSE, &mvp[0][0]);
 
 
@@ -239,6 +259,8 @@ int main(void)
     glfwSetFramebufferSizeCallback(ctx.window, resizeCallback);
     glfwSetKeyCallback(ctx.window, keyCallback);
 
+
+
     // Load OpenGL functions
     glewExperimental = true;
     GLenum status = glewInit();
@@ -247,6 +269,7 @@ int main(void)
         std::exit(EXIT_FAILURE);
     }
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
+
 
     // Initialize rendering
     glGenVertexArrays(1, &ctx.defaultVAO);
@@ -258,6 +281,8 @@ int main(void)
         glfwPollEvents();
         display(ctx);
         glfwSwapBuffers(ctx.window);
+
+            
     }
 
     // Shutdown
