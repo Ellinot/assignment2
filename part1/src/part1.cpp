@@ -75,11 +75,11 @@ void createCube(Context &ctx)
         //front face 
         -0.5f,  -0.5f,  0.5f, // first triangle starts here
          0.5f,  -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f, 
+         0.5f,  0.5f,  0.5f,  // second triangle ends here
        
          0.5f, 0.5f, 0.5f,  // second triangle starts here
         -0.5f, -0.5f, 0.5f,
-        -0.5f, 0.5f, 0.5f,
+        -0.5f, 0.5f, 0.5f,  // second triangle ends here
 
 
         //back face
@@ -162,13 +162,10 @@ void drawCube(Context &ctx)
     glUseProgram(ctx.program);
 
     double elapsed_time = glfwGetTime();
-    glUniform1f(glGetUniformLocation(ctx.program, "u_time"), float(elapsed_time)); //lägger till denna för u_time
+    glUniform1f(glGetUniformLocation(ctx.program, "u_time"), float(elapsed_time)); //u_time for animations
 
     // Define the model, view, and projection matrices here
   
-    
-    //glm::mat4 projection = glm::mat4(1.0f);
-    //glm::mat4 projection = glm::perspective(glm::radians(100.0f), (float) 1.0 / (float) 1.0, 0.1f, 100.0f);
 
     // glm::mat4 view = glm::mat4(1.0f);
     
@@ -178,18 +175,25 @@ void drawCube(Context &ctx)
     glm::vec3(0,0,0), // where the camera is looking
     glm::vec3(0,0,1)  // normalized vector, how camera is oriented
     );
+
+    //glm::mat4 projection = glm::mat4(1.0f);
     glm::mat4 projection = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.f,100.0f);
+     //glm::mat4 projection = glm::perspective(glm::radians(100.0f), (float) 1.0 / (float) 1.0, 0.1f, 100.0f);    // <- looks wierd...
     
     glm::mat4 model = glm::mat4(1.0f);
     
+    //translation matrix
     glm::mat4 translation = glm::translate(model, glm::vec3(0.f));
 
+    //rotation matrices
 	glm::mat4 rotationX = glm::rotate(model, glm::radians(15.f), glm::vec3(1.f, 0.f, 0.0f));
     glm::mat4 rotationY = glm::rotate(model, glm::radians(10.f), glm::vec3(0.f, 1.f, 0.0f));
     glm::mat4 rotationZ = glm::rotate(model, glm::radians(20.f), glm::vec3(0.f, 0.f, 1.0f));
 
+    //scaling matrix
     glm::mat4 scale = glm::scale(model, glm::vec3(0.8f) * (float) elapsed_time);
     
+    //model view projection matrix
     glm::mat4 mvp = projection * view * model * translation * rotationZ * rotationY * rotationX * scale;
 
 

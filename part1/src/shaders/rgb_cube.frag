@@ -8,7 +8,7 @@ uniform float u_time;
 void main()
 {
     //frag_color = vec4(1.0, 1.0, 1.0, 1.0);
-    frag_color = vec4(v_color, 1.0); //skickar med v_color som är en vec3
+    frag_color = vec4(v_color, 1.0);
 
-    //frag_color = vec4(abs(cos(u_time)),v_color);
+    frag_color = vec4(abs(cos(u_time)),v_color); //pulsating colors
 }

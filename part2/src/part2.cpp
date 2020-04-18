@@ -158,18 +158,20 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
 {
     glUseProgram(program);
 
-    // Define the model, view, and projection matrices here
+    //Define the model, view, and projection matrices here
+    
     glm::mat4 model = glm::mat4(1.0f);
     //glm::mat4 view = glm::mat4(1.0f);
     glm::mat4 view = glm::lookAt(
-    glm::vec3(2,0,5), // Camera is at (2,0,5), in World Space
-    glm::vec3(0,0,0), // and looks at the origin
-    glm::vec3(0,1,0)  // set to 0,1,0
+    glm::vec3(2,0,5), // position of the camera
+    glm::vec3(0,0,0), // and looks at origin
+    glm::vec3(0,1,0)  // normalized vector, how camera is oriented
     );
     //glm::mat4 projection = glm::mat4(1.0f);
     glm::mat4 projection = glm::ortho(-1.5f,1.5f,-1.5f,1.5f,0.0f,100.0f);
     glm::mat4 rotationmatrix = trackballGetRotationMatrix(ctx.trackball);
     glm::mat4 trackball = model * rotationmatrix;
+
     // Concatenate the model, view, and projection matrices to a
     // ModelViewProjection (MVP) matrix and pass it as a uniform
     // variable to the shader program
@@ -177,7 +179,6 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
 
     glUniformMatrix4fv(glGetUniformLocation(ctx.program, "u_mvp"),  //skickar med program till vertex shader som finns i struct context
                         1, GL_FALSE, &mvp[0][0]);
-
 
 
     glBindVertexArray(meshVAO.vao);

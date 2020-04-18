@@ -8,13 +8,14 @@ uniform mat4 u_mvp; //hämtar modelviewprojection
 out vec3 v_color; //skickar ut vec3
 uniform float u_time; //hämtar u_time
 
-mat4 translate(in vec3 v){
+
+/*mat4 translate(in vec3 v){
     return mat4(
         1.0, 0.0, 0.0, 0.0,
         0.0, 1.0, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
         v.x, v.y, v.z, 1.0);
-}
+} */
 
 mat4 rotate(in float angle, in vec3 v){
     float c = cos(angle);
@@ -33,10 +34,8 @@ void main()
     
     v_color = a_position.xyz + 0.5; // converts vertex position to RGB color
 
-
     //mat4 T = translate(vec3(1.0, sin(u_time), 0.0));
     mat4 R = rotate(2.0 * u_time, normalize(vec3(-0.5f, -0.1f, -0.5f)));
 
     gl_Position = u_mvp * R * a_position; // apply MVP to every vertex position (a_position)
-    //gl_Position = u_mvp * R * a_position;
 }
