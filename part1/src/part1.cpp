@@ -168,26 +168,29 @@ void drawCube(Context &ctx)
   
     
     //glm::mat4 projection = glm::mat4(1.0f);
-    //glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float) 100.0 / (float) 100.0, 0.1f, 100.0f);
-    glm::mat4 projection = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.0f,100.0f);
+    //glm::mat4 projection = glm::perspective(glm::radians(100.0f), (float) 1.0 / (float) 1.0, 0.1f, 100.0f);
+
     // glm::mat4 view = glm::mat4(1.0f);
     
-    // Camera matrix
+    // Camera
     glm::mat4 view = glm::lookAt(
-    glm::vec3(10,10,10), // Camera is at (10,10,10), in World Space
-    glm::vec3(0,0,0), // and looks at the origin
-    glm::vec3(0,-1,0)  // set to 0,-1,0 to look upside-down
+    glm::vec3(20,20,20), // eye position of the camera
+    glm::vec3(0,0,0), // where the camera is looking
+    glm::vec3(0,0,1)  // normalized vector, how camera is oriented
     );
+    glm::mat4 projection = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.f,100.0f);
     
     glm::mat4 model = glm::mat4(1.0f);
     
     glm::mat4 translation = glm::translate(model, glm::vec3(0.f));
+
 	glm::mat4 rotationX = glm::rotate(model, glm::radians(15.f), glm::vec3(1.f, 0.f, 0.0f));
     glm::mat4 rotationY = glm::rotate(model, glm::radians(10.f), glm::vec3(0.f, 1.f, 0.0f));
     glm::mat4 rotationZ = glm::rotate(model, glm::radians(20.f), glm::vec3(0.f, 0.f, 1.0f));
+
     glm::mat4 scale = glm::scale(model, glm::vec3(0.8f) * (float) elapsed_time);
     
-    glm::mat4 mvp = projection * view * model * translation * rotationZ * rotationY * rotationX * scale; //modelviewprojection skickas till vertex shader
+    glm::mat4 mvp = projection * view * model * translation * rotationZ * rotationY * rotationX * scale;
 
 
 
@@ -196,7 +199,7 @@ void drawCube(Context &ctx)
     // variable to the shader program.
     //
     // Hint: you pass GLM matrices to shader programs like this:
-    glUniformMatrix4fv(glGetUniformLocation(ctx.program, "u_mvp"),  //skickar med program till vertex shader som finns i struct context
+    glUniformMatrix4fv(glGetUniformLocation(ctx.program, "u_mvp"), 
                         1, GL_FALSE, &mvp[0][0]);
 
 

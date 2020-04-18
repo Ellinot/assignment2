@@ -37,6 +37,6 @@ void main()
     //mat4 T = translate(vec3(1.0, sin(u_time), 0.0));
     mat4 R = rotate(2.0 * u_time, normalize(vec3(-0.5f, -0.1f, -0.5f)));
 
-    gl_Position = u_mvp * R * a_position; // tillämpar u_mvp till varje vertex (a_position)
+    gl_Position = u_mvp * R * a_position; // apply MVP to every vertex position (a_position)
     //gl_Position = u_mvp * R * a_position;
 }
