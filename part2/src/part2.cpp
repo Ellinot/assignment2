@@ -159,16 +159,16 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
     glUseProgram(program);
 
     //Define the model, view, and projection matrices here
-    
+
     glm::mat4 model = glm::mat4(1.0f);
-    //glm::mat4 view = glm::mat4(1.0f);
+  
     glm::mat4 view = glm::lookAt(
     glm::vec3(2,0,5), // position of the camera
     glm::vec3(0,0,0), // and looks at origin
     glm::vec3(0,1,0)  // normalized vector, how camera is oriented
     );
-    //glm::mat4 projection = glm::mat4(1.0f);
-    glm::mat4 projection = glm::ortho(-1.5f,1.5f,-1.5f,1.5f,0.0f,100.0f);
+   
+    glm::mat4 projection = glm::perspective(glm::radians(50.0f), (float) ctx.width / (float) ctx.height, 0.1f, 100.0f);
     glm::mat4 rotationmatrix = trackballGetRotationMatrix(ctx.trackball);
     glm::mat4 trackball = model * rotationmatrix;
 
@@ -177,8 +177,19 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
     // variable to the shader program
     glm::mat4 mvp = projection * view * trackball;
 
-    glUniformMatrix4fv(glGetUniformLocation(ctx.program, "u_mvp"),  //skickar med program till vertex shader som finns i struct context
-                        1, GL_FALSE, &mvp[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(ctx.program, "u_mvp"), 1, GL_FALSE, &mvp[0][0]);
+
+    //calculate Model View Matrix (u_mv)
+    glm::mat4 mv = view * trackball;
+
+    glUniformMatrix4fv(glGetUniformLocation(ctx.program, "u_mv"), 1, GL_FALSE, &mv[0][0]);
+
+
+    double elapsed_time = glfwGetTime();
+
+    //defining lightsource position and changing position each frame based on elapsed time
+    glm::vec3 lightPosition = glm::vec3(glm::sin(elapsed_time)+ 2,5,glm::cos(elapsed_time)+2);
+    glUniform3fv(glGetUniformLocation(ctx.program, "u_light_position"), 1, &lightPosition[0]);
 
 
     glBindVertexArray(meshVAO.vao);
@@ -247,7 +258,7 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
     Context *ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
     if (action == GLFW_PRESS) {
         mouseButtonPressed(ctx, button, x, y);
-       
+
     }
     else {
         mouseButtonReleased(ctx, button, x, y);

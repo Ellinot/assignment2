@@ -71,12 +71,12 @@ void createCube(Context &ctx)
     // vertices that together make up 12 triangles. One triangle is
     // given; you have to define the rest!
     const GLfloat vertices[] = {
-       
-        //front face 
+
+        //front face
         -0.5f,  -0.5f,  0.5f, // first triangle starts here
          0.5f,  -0.5f,  0.5f,
          0.5f,  0.5f,  0.5f,  // second triangle ends here
-       
+
          0.5f, 0.5f, 0.5f,  // second triangle starts here
         -0.5f, -0.5f, 0.5f,
         -0.5f, 0.5f, 0.5f,  // second triangle ends here
@@ -106,7 +106,7 @@ void createCube(Context &ctx)
          -0.5f, 0.5f, 0.5f,
          -0.5f, -0.5f, 0.5f,
          -0.5f, -0.5f, -0.5f,
-       
+
          -0.5f, 0.5f, 0.5f,
          -0.5f, -0.5f, -0.5f,
          -0.5f, 0.5f, -0.5f,
@@ -120,7 +120,7 @@ void createCube(Context &ctx)
          0.5f, -0.5f, 0.5f,
         -0.5f, -0.5f, -0.5f,
         -0.5f, -0.5f, 0.5f,
-       
+
         //bottom face
         -0.5f, 0.5f, -0.5f,
          0.5f,  0.5f, -0.5f,
@@ -128,7 +128,7 @@ void createCube(Context &ctx)
 
         -0.5f, 0.5f, -0.5f,
          0.5f, 0.5f, 0.5f,
-        -0.5f,  0.5f, 0.5f,    
+        -0.5f,  0.5f, 0.5f,
 
     };
 
@@ -165,34 +165,30 @@ void drawCube(Context &ctx)
     glUniform1f(glGetUniformLocation(ctx.program, "u_time"), float(elapsed_time)); //u_time for animations
 
     // Define the model, view, and projection matrices here
-  
 
-    // glm::mat4 view = glm::mat4(1.0f);
-    
-    // Camera
+    // Virtual camera
     glm::mat4 view = glm::lookAt(
     glm::vec3(20,20,20), // eye position of the camera
     glm::vec3(0,0,0), // where the camera is looking
     glm::vec3(0,0,1)  // normalized vector, how camera is oriented
     );
 
-    //glm::mat4 projection = glm::mat4(1.0f);
-    glm::mat4 projection = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.f,100.0f);
-     //glm::mat4 projection = glm::perspective(glm::radians(100.0f), (float) 1.0 / (float) 1.0, 0.1f, 100.0f);    // <- looks wierd...
-    
-    glm::mat4 model = glm::mat4(1.0f);
-    
-    //translation matrix
-    glm::mat4 translation = glm::translate(model, glm::vec3(0.f));
+    glm::mat4 projection = glm::perspective(glm::radians(30.0f), (float) ctx.width / (float) ctx.height, 0.1f, 100.0f);
+    //glm::mat4 projection = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.f,100.0f);
 
-    //rotation matrices
+    glm::mat4 model = glm::mat4(1.0f);
+
+    //translation matrix
+    glm::mat4 translation = glm::translate(model, glm::vec3(2.f));
+
+    //rotation matrix
 	glm::mat4 rotationX = glm::rotate(model, glm::radians(15.f), glm::vec3(1.f, 0.f, 0.0f));
     glm::mat4 rotationY = glm::rotate(model, glm::radians(10.f), glm::vec3(0.f, 1.f, 0.0f));
     glm::mat4 rotationZ = glm::rotate(model, glm::radians(20.f), glm::vec3(0.f, 0.f, 1.0f));
 
     //scaling matrix
     glm::mat4 scale = glm::scale(model, glm::vec3(0.8f) * (float) elapsed_time);
-    
+
     //model view projection matrix
     glm::mat4 mvp = projection * view * model * translation * rotationZ * rotationY * rotationX * scale;
 
@@ -201,14 +197,13 @@ void drawCube(Context &ctx)
     // Concatenate the model, view, and projection matrices to a
     // ModelViewProjection (MVP) matrix and pass it as a uniform
     // variable to the shader program.
-    //
     // Hint: you pass GLM matrices to shader programs like this:
-    glUniformMatrix4fv(glGetUniformLocation(ctx.program, "u_mvp"), 
+    glUniformMatrix4fv(glGetUniformLocation(ctx.program, "u_mvp"),
                         1, GL_FALSE, &mvp[0][0]);
 
 
     glBindVertexArray(ctx.cubeVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 36); //ändrar till 36
+    glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(ctx.defaultVAO);
 
     glUseProgram(0);
@@ -289,7 +284,7 @@ int main(void)
         display(ctx);
         glfwSwapBuffers(ctx.window);
 
-            
+
     }
 
     // Shutdown

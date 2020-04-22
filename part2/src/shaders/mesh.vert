@@ -29,9 +29,7 @@ float diffuse = max(0.0, dot(N, L));
 // Multiply the diffuse reflection term with the surface color
 v_color = diffuse * vec3(0.0, 1.0, 0.0);
 
-
-//v_color = vec3(0.0, 1.0, 0.0);
-v_color = 0.5 * a_normal + 0.5; // maps the normal direction to an RGB color
+//v_color = 0.5 * a_normal + 0.5; // maps the normal direction to an RGB color
 
 gl_Position = u_mvp * a_position;
 
